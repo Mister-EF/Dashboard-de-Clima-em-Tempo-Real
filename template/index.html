@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); width: 300px; }
+        input { padding: 10px; border-radius: 5px; border: none; width: 80%; margin-bottom: 10px; }
+        button { padding: 10px 20px; border-radius: 5px; border: none; background: #3498db; color: white; cursor: pointer; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Clima Agora</h2>
+        <input type="text" id="cidadeInput" placeholder="Digite a cidade (ex: Taubaté)">
+        <button onclick="buscarClima()">Buscar</button>
+        
+        <div id="resultado" class="result" style="display: none;">
+            <h3 id="nomeCidade"></h3>
+            <img id="iconeClima" src="" alt="Clima">
+            <h1 id="tempReal"></h1>
+            <p id="descClima" style="text-transform: capitalize;"></p>
+        </div>
+    </div>
+
+    <script>
+    async function buscarClima() {
+        const cidade = document.getElementById('cidadeInput').value;
+        if(!cidade) return;
+
+        const res = await fetch('/clima', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cidade })
+        });
+
+        const dados = await res.json();
+        if (res.ok) {
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('nomeCidade').innerText = `${dados.cidade}, ${dados.estado}`;
+            document.getElementById('tempReal').innerText = `${Math.round(dados.temp)}°C`;
+            
+            let status = "Céu Limpo";
+            let emoji = "☀️";
+            if (dados.code >= 1 && dados.code <= 3) { status = "Parcialmente Nublado"; emoji = "⛅"; }
+            else if (dados.code >= 45) { status = "Neblina ou Chuva"; emoji = "🌧️"; }
+            
+            document.getElementById('descClima').innerText = `${status} | Vento: ${dados.wind}km/h`;
+            document.getElementById('iconeClima').innerHTML = `<span style="font-size: 50px;">${emoji}</span>`;
+        } else {
+            alert(dados.erro);
+        }
+    }
+</script>
+</body>
+</html>
