@@ -103,5 +103,5 @@ Success response:
 - Glassmorphism card UI with `backdrop-filter` and semi-transparent borders
 - Graceful error handling for unknown cities and connection failures
 - No API key required — fully open and free to run
-```
+
 Thank you for your attention!
