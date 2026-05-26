@@ -1,4 +1,4 @@
-# Real-Time Weather Dashboard
+# Real-Time Weather Dashboardads
 
 An integrated project using a Python backend to securely fetch data from external APIs and a JavaScript frontend to render dynamic weather icons and live temperature data. Type a city, get the current conditions — instantly.
 
